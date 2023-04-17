@@ -1,0 +1,38 @@
+{
+  "name": "PWA Cookbook",
+  "short_name": "PWACookBook",
+  "description": "This is a PWA manifest json file",
+  "start_url": "./index.html",
+  "id": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff", 
+  "theme_color": "#A3A3",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/img/icons/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+        "src": "/img/icons/favicon-32x32.png",
+        "sizes": "32x32",
+        "type": "image/png"
+    },
+    {
+        "src": "/img/icons/mstile-150x150.png",
+        "sizes": "150x150",
+        "type": "image/png"
+    },
+    {
+        "src": "/img/icons/android-chrome-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+    },
+    {
+        "src": "/img/icons/android-chrome-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+    }
+  ]
+}
