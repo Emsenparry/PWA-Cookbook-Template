@@ -17,6 +17,16 @@ const assets = [
     'https://fonts.gstatic.com/s/materialicons/v140/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2'
 ]
 
+const limitCacheSize = (cacheName, numAllowedFiles) => {
+    caches.open(cacheName).then(cache => {
+        cache.keys().then(keys => {
+            if(keys.length > numAllowedFiles) {
+                cache.delete(keys[0]).then(limitCacheSize(cacheName, numAllowedFiles))
+            }
+        })
+    })
+}
+
 // Her installere vi vores service worker
 self.addEventListener('install', event => {
     // console.log('serviceworker has been installed');
@@ -56,6 +66,7 @@ self.addEventListener('activate', event => {
 
 // Fetch event
 self.addEventListener('fetch', event => {
+
     // Fix af problem med dynamisk cache og chrome-extension bug
     if (!(event.request.url.indexOf('http') === 0)) return;
     // console.log(event.request);
@@ -70,6 +81,10 @@ self.addEventListener('fetch', event => {
                 return caches.open(dynamicCacheName).then(cache => {
                     // Tilføj side til dynamisk cache
                     cache.put(event.request.url, fetchRes.clone()) //Clone tager en kopi af variablen
+
+                    limitCacheSize(dynamicCacheName, 2)
+
+                    //Returner request
                     return fetchRes
                 })
             })
