@@ -74,7 +74,7 @@ self.addEventListener('fetch', event => {
     // Kontroller svar på request
     event.respondWith(
         // Kig efter file match i cache
-        caches.match(event.request).then(cacheRes => {
+        caches.match(event.request).then(cacheRes => {           
             // Returner hvis match fra cache - ellers hent fil på server
             return cacheRes || fetch(event.request).then(fetchRes => {
                 // Åbner dynamisk cache
@@ -83,6 +83,10 @@ self.addEventListener('fetch', event => {
                     cache.put(event.request.url, fetchRes.clone()) //Clone tager en kopi af variablen
 
                     limitCacheSize(dynamicCacheName, 2)
+
+                    .catch(() => {
+                        return caches.match('')
+                    }) 
 
                     //Returner request
                     return fetchRes
