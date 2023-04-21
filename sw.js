@@ -20,7 +20,7 @@ const assets = [
 const limitCacheSize = (cacheName, numAllowedFiles) => {
     caches.open(cacheName).then(cache => {
         cache.keys().then(keys => {
-            if(keys.length > numAllowedFiles) {
+            if (keys.length > numAllowedFiles) {
                 cache.delete(keys[0]).then(limitCacheSize(cacheName, numAllowedFiles))
             }
         })
@@ -48,7 +48,6 @@ self.addEventListener('activate', event => {
     console.log('serviceworker has been activated');
     // Vent til alle opgaver er udført
     event.waitUntil(
-
         /* Slet tidligere cache versioner */
 
         // Kald alle cache nøgler (navn på cache samlinger)
@@ -69,31 +68,35 @@ self.addEventListener('fetch', event => {
 
     // Fix af problem med dynamisk cache og chrome-extension bug
     if (!(event.request.url.indexOf('http') === 0)) return;
-    // console.log(event.request);
 
     // Kontroller svar på request
     event.respondWith(
         // Kig efter file match i cache
-        caches.match(event.request).then(cacheRes => {           
+        caches.match(event.request).then(cacheRes => {
             // Returner hvis match fra cache - ellers hent fil på server
-            return cacheRes || fetch(event.request).then(fetchRes => {
-                // Åbner dynamisk cache
-                return caches.open(dynamicCacheName).then(cache => {
-                    // Tilføj side til dynamisk cache
-                    cache.put(event.request.url, fetchRes.clone()) //Clone tager en kopi af variablen
+            return cacheRes || fetch(event.request)
 
-                    limitCacheSize(dynamicCacheName, 2)
+                .then(fetchRes => {
+                    // Åbner dynamisk cache
+                    return caches.open(dynamicCacheName).then(cache => {
+                        // Tilføj side til dynamisk cache
+                        //Clone tager en kopi af variablen
+                        cache.put(event.request.url, fetchRes.clone())
 
-                    .catch(() => {
-                        return caches.match('')
-                    }) 
+                        limitCacheSize(dynamicCacheName, 2)
 
-                    //Returner request
-                    return fetchRes
+                        //Returner request
+                        return fetchRes
+                    })
                 })
-            })
+        }).catch(() => {
+            if (event.request.url.indexOf('.html') > -1) {
+                return caches.match('/pages/fallback.html')
+            }
         })
     )
-
 })
+
+
+
 
