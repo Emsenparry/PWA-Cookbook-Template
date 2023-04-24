@@ -1,5 +1,5 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js'
-import { getFirestore, getDocs, collection, onSnapshot, query } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js'
+import { getFirestore, getDocs, collection, onSnapshot, query, enableIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js'
 import { renderRecipe } from './ui.js';
 
 // Your web app's Firebase configuration
@@ -15,6 +15,8 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app)
+enableIndexedDbPersistence(db)
+
 
 const getData = async collectionName => {
     const q = query(collection(db, collectionName))
@@ -23,6 +25,7 @@ const getData = async collectionName => {
         querySnapshot.docChanges().forEach(change => {
             if(change.type === "added") {
                 renderRecipe(change.doc.data(), change.doc.id)
+                console.log(change.doc.data());
             }
             if(change.type === "removed") {
                 

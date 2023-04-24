@@ -1,7 +1,7 @@
 // Navn på App Shell Cache til assets filer
-const staticCacheName = 'site-static-v1'
+const staticCacheName = 'site-static-v4'
 // Navn på dynamisk cache
-const dynamicCacheName = 'site-dynamic-v1'
+const dynamicCacheName = 'site-dynamic-v3'
 
 // Array med assets filer til statisk cache
 const assets = [
@@ -9,6 +9,7 @@ const assets = [
     './index.html',
     './js/app.js',
     './js/ui.js',
+    './js/firestore-config.js',
     './js/materialize.min.js',
     './css/styles.css',
     './css/materialize.min.css',
