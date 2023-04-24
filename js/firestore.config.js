@@ -1,6 +1,6 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js'
 import { getFirestore, getDocs, collection, onSnapshot, query, enableIndexedDbPersistence } from 'https://www.gstatic.com/firebasejs/9.20.0/firebase-firestore.js'
-import { renderRecipe } from './ui.js';
+import { renderRecipe, removeRecipe } from './ui.js';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -28,7 +28,7 @@ const getData = async collectionName => {
                 console.log(change.doc.data());
             }
             if(change.type === "removed") {
-                
+                removeRecipe(change.doc.id);
             }
         })
     })
